@@ -1,5 +1,5 @@
 import { Response, Request, Router } from "express";
-import { RouterExpressCustom } from "./router";
+import { RouterExpressCustom } from "../../router";
 
 const router = Router();
 
