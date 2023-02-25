@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { RouterExpressCustom } from './router';
+import { RouterExpressCustom } from './infrastructure/router';
+import { Calificacion } from './domain/entities/calificacion.entity';
 
 const app = express();
 const routerApp = new RouterExpressCustom(app);
