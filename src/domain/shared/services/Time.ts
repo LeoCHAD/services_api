@@ -33,7 +33,6 @@ export class Time{
     /**
    * Verifica que la hora se encuentre entre las 8:00 y las 18:30
    * ya que el negocio solo presta sus serviciso en esos tiempos
-   * @param time 
    * @returns 
    */
     public static isOnTimeVerify = (): boolean => {

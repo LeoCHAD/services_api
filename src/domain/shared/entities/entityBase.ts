@@ -1,5 +1,4 @@
 import { Guid } from "../services/Guid";
-import { Time } from "../services/Time";
 
 /**
  * Entidad base que establece el atributo _id el cual será común a todas

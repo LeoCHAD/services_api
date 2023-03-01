@@ -1,6 +1,6 @@
-import { Repository } from "../shared/reposirories/repository.interface"; 
-import { ClienteDeNegocio } from "../entities/clienteDeNegocio.entity";
+import { Repository } from "../shared/repositories/repository.interface"; 
+import { ClienteDeNegocio } from "../entities/clienteDeNegocio/clienteDeNegocio.entity";
 
-export interface ClienteRepository extends Repository<ClienteDeNegocio>{
+export interface ClienteDeNegocioRepository extends Repository<ClienteDeNegocio>{
 
 }
