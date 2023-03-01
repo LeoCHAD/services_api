@@ -1,13 +1,13 @@
 import { compare } from "bcryptjs";
-import { EntityBase } from "../../shared/entities/entityBase";
+import { EntityBase } from "../../shared/entities/EntityBase";
 import { Guid } from "../../shared/services/Guid";
 
 export class Cuenta extends EntityBase {
   private userName: string;
   private password: string;
 
-  constructor(userName: string, password: string) {
-    super(new Guid());
+  constructor(id: Guid, userName: string, password: string) {
+    super(id);
     this.userName = userName;
     this.password = password;
   }
