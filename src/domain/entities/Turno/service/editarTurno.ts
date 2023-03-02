@@ -1,15 +1,13 @@
 import { TurnoRepository } from '../../../repositories/turno.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
-import { EntityService } from '../../../shared/entities/EntityService';
 import { Guid } from '../../../shared/services/Guid';
-import { ResponseQTurno } from '../../../shared/services/ResponseQ';
 import { Time } from '../../../shared/services/Time';
+import { ResponseQTurno } from '../../../shared/utilities/ResponseQ';
+import { TurnoDTO } from '../turno.dto';
 import { Turno } from '../turno.entity';
 
-export class EditarTurnoService extends EntityService<Turno> {
-  constructor(turno: Turno, private repository: TurnoRepository){
-    super(turno);
-  }
+export class EditarTurnoService {
+  constructor(private readonly repository: TurnoRepository){}
   
   /**
    * Modifica los datos de turno identificado con el id con los datos actualmente 
@@ -17,10 +15,10 @@ export class EditarTurnoService extends EntityService<Turno> {
    * @param id 
    * @returns 
    */
-  public editarTurno = async (id: Guid): Promise<Turno> => {
+  public editar = async (id: Guid, newData: TurnoDTO): Promise<Turno> => {
     try {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQTurno>(ResponseQTurno.OUT_OF_TIME);
-      const responseEdit = await this.repository.edit(id, this.entity);
+      const responseEdit = await this.repository.edit(id, newData);
       if (!responseEdit) throw new EntityException<ResponseQTurno>(ResponseQTurno.ERROR);
       return responseEdit;
     } catch (error) {
@@ -28,5 +26,4 @@ export class EditarTurnoService extends EntityService<Turno> {
       throw new EntityException<ResponseQTurno>(ResponseQTurno.ERROR);
     }
   }; //end method
-
 }

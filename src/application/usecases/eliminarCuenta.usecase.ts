@@ -5,26 +5,14 @@ import { MediatorEvents } from "../../domain/events/mediator";
 import { ClienteRemovidoEvent } from "../../domain/events/clienteRemovido.event";
 import { EventBody } from "../../domain/shared/events/eventBase";
 import { Notificacion } from "../../domain/entities/notificacion/notificacion.entity";
+import { Guid } from "../../domain/shared/services/Guid";
 
 export class EliminarCuentaUseCase {
-  private readonly mediator: MediatorEvents;
+  constructor(private readonly repository: CuentaRepository){}
 
-  constructor(private readonly repository: CuentaRepository){
-    this.mediator = new MediatorEvents();
-    this.mediator.subscribe(ClienteRemovidoEvent.nameEvent, new Notificacion())
-  }
-
-  public eliminar = async (cuenta: Cuenta) =>{
-    const serviceCuenta = new RemoverCuentaService(cuenta, this.repository);
-    const cuentaRemovida = await serviceCuenta.removerCuenta();
-
-    //event...
-    const newEvent = new ClienteRemovidoEvent(cuenta.id, {
-      title: ClienteRemovidoEvent.nameEvent,
-      data: cuenta
-    } as EventBody)
-    this.mediator.publish(ClienteRemovidoEvent.nameEvent, newEvent)
-
+  public eliminar = async (cuentaId: Guid) =>{
+    const serviceCuenta = new RemoverCuentaService(this.repository);
+    const cuentaRemovida = await serviceCuenta.remover(cuentaId);
     return cuentaRemovida;
   }
 }

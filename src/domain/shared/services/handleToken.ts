@@ -1,15 +1,25 @@
-import {sign, verify} from 'jsonwebtoken';
+import {JwtPayload, sign, verify} from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || '1010';
 
-const generateToken = async (data: {})=>{
-  const jwt = sign(data, JWT_SECRET,{expiresIn: '1h'});
+const generateToken = (payload: {}, expiresIn: string)=>{
+  const jwt = sign(payload, JWT_SECRET,{expiresIn});
   return jwt
 };
-
-const verifyToken = (jwt: string)=>{
-  const isOk = verify(jwt, JWT_SECRET);
-  return isOk
+const decodeToken = (jwt: string): string | JwtPayload | boolean=>{
+  try {
+    return verify(jwt, JWT_SECRET);
+  } catch (error) {
+    return false;
+  }
+};
+const verifyToken = (jwt: string): boolean=>{
+  try {
+    verify(jwt, JWT_SECRET);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
 
-export {generateToken, verifyToken}
+export {generateToken, verifyToken, decodeToken}

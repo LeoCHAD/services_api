@@ -30,6 +30,7 @@ export enum ResponseQListaDeEspera {
   NOT_FOUND = 'Lista de espera no encontrada: la lista de espera no está registrada en el repositorio',
   OUT_OF_TIME ='Lista de espera de tiempo: la lista de espera no está dentro de los tiempos de atención del negocio',
   ALREADY_EXIST = 'Lista de espera existente: la lista de espera ya está registrada en el repositorio',
+  IS_EMPTY = 'Lista de espera vacía: la lista de espera consultada se encuentra vacía',
   ERROR = 'Error en proceso de lista de espera: peticiones o comprobaciones fallidas',
 }
 

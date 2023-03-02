@@ -3,16 +3,16 @@ import { EntityBase } from "../../shared/entities/EntityBase";
 import { Guid } from "../../shared/services/Guid";
 
 export class Cuenta extends EntityBase {
-  private userName: string;
+  private email: string;
   private password: string;
 
-  constructor(id: Guid, userName: string, password: string) {
+  constructor(id: Guid, email: string, password: string) {
     super(id);
-    this.userName = userName;
+    this.email = email;
     this.password = password;
   }
   get user(){
-    return this.userName
+    return this.email
   };
   get pass(){
     return this.password

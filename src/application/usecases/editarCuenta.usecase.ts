@@ -1,13 +1,14 @@
 import { Cuenta } from "../../domain/entities/cuenta/cuenta.entity";
-import { CuentaRepository } from "../../domain/repositories/cuenta.repository";
 import { EditarCuentaService } from "../../domain/entities/cuenta/service/editarCuenta";
+import { CuentaRepository } from "../../domain/repositories/cuenta.repository";
+import { Guid } from "../../domain/shared/services/Guid";
 
 export class EditarCuentaUseCase {
   constructor(private readonly repository: CuentaRepository){}
 
-  public editar = async (cuenta: Cuenta): Promise<Cuenta> =>{
-    const serviceCuenta = new EditarCuentaService(cuenta, this.repository);
-    const cuentaEditada = await serviceCuenta.editarCuenta(cuenta.id);
+  public editar = async (cuentaId: Guid, newEmail: string, newPassword: string): Promise<Cuenta> =>{
+    const serviceEditarCuenta = new EditarCuentaService(this.repository);
+    const cuentaEditada = await serviceEditarCuenta.editar(cuentaId, {email: newEmail, password: newPassword});
     return cuentaEditada;
   }
 }

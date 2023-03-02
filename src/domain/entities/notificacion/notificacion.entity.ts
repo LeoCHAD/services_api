@@ -4,7 +4,8 @@ import { Observer } from "../../shared/events/observer";
 import { Guid } from "../../shared/services/Guid";
 
 export class Notificacion extends EntityBase implements Observer{
-  private readonly evento?: EventBody;
+  public readonly event?: EventBody;
+  public readonly body?: string;
   
   constructor(){
     super(new Guid());

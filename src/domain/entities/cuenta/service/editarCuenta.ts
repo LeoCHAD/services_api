@@ -1,14 +1,13 @@
 import { CuentaRepository } from '../../../repositories/cuenta.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
-import { EntityService } from '../../../shared/entities/EntityService';
 import { Guid } from '../../../shared/services/Guid';
-import { ResponseQCuenta } from '../../../shared/services/ResponseQ';
 import { Time } from '../../../shared/services/Time';
+import { ResponseQCuenta } from '../../../shared/utilities/ResponseQ';
+import { CuentaDTO } from '../cuenta.dto';
 import { Cuenta } from '../cuenta.entity';
 
-export class EditarCuentaService extends EntityService<Cuenta> {
-  constructor(cuenta: Cuenta, private repository: CuentaRepository){
-    super(cuenta);
+export class EditarCuentaService {
+  constructor(private readonly repository: CuentaRepository){
   }
 
   /**
@@ -16,10 +15,10 @@ export class EditarCuentaService extends EntityService<Cuenta> {
    * @param id 
    * @returns 
    */
-  public editarCuenta = async (id: Guid): Promise<Cuenta> => {
+  public editar = async (id: Guid, newData: CuentaDTO): Promise<Cuenta> => {
     try {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
-      const responseEdit = await this.repository.edit(id, this.entity);
+      const responseEdit = await this.repository.edit(id, newData);
       if (!responseEdit) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.ERROR);
       return responseEdit;
     } catch (error) {

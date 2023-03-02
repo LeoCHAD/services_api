@@ -2,24 +2,23 @@ import { ClienteDeNegocioRepository } from '../../../repositories/clienteDeNegoc
 import { EntityException } from '../../../shared/entities/EntityException';
 import { EntityService } from '../../../shared/entities/EntityService';
 import { Guid } from '../../../shared/services/Guid';
-import { ResponseQClienteDeNegocio } from '../../../shared/services/ResponseQ';
+import { ResponseQClienteDeNegocio } from '../../../shared/utilities/ResponseQ';
 import { Time } from '../../../shared/services/Time';
 import { ClienteDeNegocio } from '../clienteDeNegocio.entity';
+import { ClienteDeNegocioDTO } from '../clienteDeNegocio.dto';
 
-export class EditarClienteDeNegocioService extends EntityService<ClienteDeNegocio> {
-  constructor(clienteDeNegocio: ClienteDeNegocio, private repository: ClienteDeNegocioRepository){
-    super(clienteDeNegocio);
-  }
+export class EditarClienteDeNegocioService {
+  constructor(private readonly repository: ClienteDeNegocioRepository){}
   /**
-   * Modifica el ciente de negocio identificado con el id, con la 
-   * información de la instancia actual
-   * @param id 
+   * 
+   * @param clienteDNId 
+   * @param newData 
    * @returns 
    */
-  public editarClienteDeNegocio = async (id: Guid): Promise<ClienteDeNegocio> => {
+  public editar = async (clienteDNId: Guid, newData: ClienteDeNegocioDTO): Promise<ClienteDeNegocio> => {
     try {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQClienteDeNegocio>(ResponseQClienteDeNegocio.OUT_OF_TIME);
-      const responseEdit = await this.repository.edit(id, this.entity);
+      const responseEdit = await this.repository.edit(clienteDNId, newData);
       return responseEdit;
     } catch (error) {
       console.error(error);
