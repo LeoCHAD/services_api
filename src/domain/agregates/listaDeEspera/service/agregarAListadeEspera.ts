@@ -1,6 +1,6 @@
 import { EntityException } from "../../../shared/entities/EntityException";
 import { ResponseQListaDeEspera } from "../../../shared/utilities/ResponseQ";
-import { Turno } from "../../../entities/Turno/turno.entity"; 
+import { Turno } from "../../../entities/turno/turno.entity"; 
 import { TurnoRepository } from "../../../repositories/turno.repository";
 
 export class AgregarAListaDeEsperaService {

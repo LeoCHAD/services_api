@@ -3,6 +3,7 @@ export class Time{
   hours: number;
   minutes: number;
   seconds: number;
+  miliseconds: number;
 
   constructor(miliseconds: number){
     // Cálculo de días, horas, minutos y segundos
@@ -15,10 +16,11 @@ export class Time{
     const remainingHours = hours % 24;
     const remainingMinutes = minutes % 60;
     const remainingSeconds = seconds % 60;
-    this.days = days
-    this.hours = remainingHours
-    this.minutes = remainingMinutes
-    this.seconds = remainingSeconds
+    this.days = days;
+    this.hours = remainingHours;
+    this.minutes = remainingMinutes;
+    this.seconds = remainingSeconds;
+    this.miliseconds = miliseconds;
   }
   /**
    * Determina el tiempo actual en el que se llama la función
@@ -37,7 +39,7 @@ export class Time{
    */
     public static isOnTimeVerify = (): boolean => {
       const now = Time.getLocalTime();
-      if (now.hours >= 8 && now.hours < 18) {
+      if (now.hours >= 8 && now.hours < 19) {
         return true
       } else if (now.hours == 18 && now.minutes < 30) {
         return false
@@ -45,4 +47,16 @@ export class Time{
         return false
       }
     };
+    /**
+     * Verifica si el tiempo trancurrido desde una marca inicial (initialTime) se encuentra dentro 
+     * de un plazo establecido (duration)
+     * @param initialTime 
+     * @param duration 
+     * @returns 
+     */
+    public static isDurationOnTime = (initialTime: number, duration: number): boolean => {
+      const actualTime = Time.getLocalTime();
+      const responseCompare = actualTime.miliseconds - initialTime;
+      return responseCompare <= duration;
+    }
 }

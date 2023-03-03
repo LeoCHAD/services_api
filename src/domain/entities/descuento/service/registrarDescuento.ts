@@ -21,7 +21,7 @@ export class RegistrarDescuentoService extends EntityService<Descuento> {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
       
       const responseDescuento = await this.repository.consultByDetail({
-        id: this.entity.id,
+        id: this.entity.id.id,
       });
       if (responseDescuento !== null) throw new EntityException<ResponseQDescuento>(ResponseQDescuento.ALREADY_EXIST);
       const responseSave = await this.repository.save(this.entity);

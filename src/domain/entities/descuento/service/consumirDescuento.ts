@@ -24,9 +24,9 @@ export class ConsumirDescuentoService{
           ResponseQDescuento.NOT_FOUND
         );
 
-      const verified = verifyToken(responseDescuento.codigo);
-      const removerService = new RemoverDescuentoService(responseDescuento, this.repository);
-      const response = await removerService.remover();
+      const verified = verifyToken(responseDescuento[0].codigo);
+      const removerService = new RemoverDescuentoService(this.repository);
+      const response = await removerService.remover(descuentoId);
 
       return verified;
     } catch (error) {

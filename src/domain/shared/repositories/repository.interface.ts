@@ -8,12 +8,12 @@ export interface Repository<T> {
    * consulta un item especifico en base uno de sus atributos
    * @param detail - detail de item a consultar
    */
-  consultByDetail(detail: any): Promise<T> | null;
+  consultByDetail(detail: any): Promise<T[] | null> ;
   /**
    * consulta una cantidad finita de items, en base a un tamaño de lote
    * @param lotSize - tamaño de lote
    */
-  consultMany(lotSize: number | string): Promise<T[]> | null;
+  consultMany(lotSize: number | string): Promise<T[] | null>;
   /**
    * edita los datos de un item en base a una entrada nueva de datos, este
    * método está sujeto a ser sobreescrito al heredarse para especificar

@@ -1,15 +1,13 @@
 import { TurnoRepository } from '../../../repositories/turno.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
 import { EntityService } from '../../../shared/entities/EntityService';
-import { Guid } from '../../../shared/services/Guid';
 import { Time } from '../../../shared/services/Time';
 import { ResponseQTurno } from '../../../shared/utilities/ResponseQ';
-import { TurnoDTO } from '../turno.dto';
 import { Turno } from '../turno.entity';
 
 export class RegistrarTurnoService extends EntityService<Turno> {
-  constructor(dataTurno: TurnoDTO, private readonly repository: TurnoRepository){
-    super(new Turno(new Guid(), dataTurno.cuentaId!,dataTurno.turnNumber!, dataTurno.duracion!));
+  constructor(turno: Turno, private readonly repository: TurnoRepository){
+    super(turno);
   }
   /**
    * Registro de entidad turno a partir de la instancia actual

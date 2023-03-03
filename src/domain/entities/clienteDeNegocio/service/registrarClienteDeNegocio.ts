@@ -17,7 +17,7 @@ export class RegistrarClienteDeNegocioService extends EntityService<ClienteDeNeg
         new Guid(),
         dataClienteDeNegocio.name,
         dataClienteDeNegocio.celNumber,
-        dataClienteDeNegocio.cuenta
+        dataClienteDeNegocio.cuentaId
       )
     );
   }
@@ -29,7 +29,7 @@ export class RegistrarClienteDeNegocioService extends EntityService<ClienteDeNeg
           ResponseQClienteDeNegocio.OUT_OF_TIME
         );
       const responseClienteDeNegocio = await this.repository.consultByDetail({
-        id: this.entity.id,
+        id: this.entity.id.id,
       });
       if (responseClienteDeNegocio !== null)
         throw new EntityException<ResponseQClienteDeNegocio>(

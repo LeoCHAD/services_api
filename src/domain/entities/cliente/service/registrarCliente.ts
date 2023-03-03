@@ -12,7 +12,7 @@ export class RegistrarClienteService extends EntityService<Cliente> {
     dataCliente: ClienteDTO,
     private readonly repository: ClienteRepository
   ) {
-    super(new Cliente(new Guid(), dataCliente.name, dataCliente.celNumber));
+    super(new Cliente(new Guid(), dataCliente.name));
   }
 
   /**
@@ -26,7 +26,7 @@ export class RegistrarClienteService extends EntityService<Cliente> {
           ResponseQCliente.OUT_OF_TIME
         );
       const responseCliente = await this.repository.consultByDetail({
-        id: this.entity.id,
+        id: this.entity.id.id,
       });
       if (responseCliente !== null)
         throw new EntityException<ResponseQCliente>(

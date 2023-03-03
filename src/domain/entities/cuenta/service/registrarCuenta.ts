@@ -20,7 +20,7 @@ export class RegistrarCuentaService extends EntityService<Cuenta> {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
       
       const responseCuenta = await this.repository.consultByDetail({
-        user: this.entity.user,
+        email: this.entity.email,
       });
       if (responseCuenta !== null) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.ALREADY_EXIST);
       const responseSave = await this.repository.save(this.entity);

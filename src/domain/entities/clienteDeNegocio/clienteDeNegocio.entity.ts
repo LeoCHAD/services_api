@@ -5,12 +5,12 @@ import { Guid } from "../../shared/services/Guid";
 export class ClienteDeNegocio extends  EntityBase{
   private name: string;
   private celNumber: number;
-  private cuenta: Cuenta;
+  public readonly cuentaId: Guid;
 
-  constructor(id: Guid, name: string, celNumber: number, cuenta: Cuenta){
+  constructor(id: Guid, name: string, celNumber: number, cuentaId: Guid){
     super(id);
     this.name = name;
     this.celNumber = celNumber;
-    this.cuenta = cuenta;
+    this.cuentaId = cuentaId;
   }
 }

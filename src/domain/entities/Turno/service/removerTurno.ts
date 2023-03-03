@@ -14,7 +14,7 @@ export class RemoverTurnoService implements Observer {
   
   public notify =  (event: EventBase):void => {
     if(event.body.title === TurnoCompletoEvent.nameEvent){
-      this.removerTurno(event.owner);
+      this.remover(event.owner);
     }
   };
 
@@ -23,7 +23,7 @@ export class RemoverTurnoService implements Observer {
    * @param id 
    * @returns 
    */
-  public removerTurno = async (turnoId: Guid): Promise<Turno> => {
+  public remover = async (turnoId: Guid): Promise<Turno> => {
     try {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQTurno>(ResponseQTurno.OUT_OF_TIME);
       const responseEdit = await this.repository.remove(turnoId);
