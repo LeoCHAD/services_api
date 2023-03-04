@@ -1,9 +1,9 @@
-import { WaitTimeTemporalRepository } from "../../../../repositories/temporal.repository";
+import { TemporalRepository } from "../../../../repositories/temporal.repository";
 import { EntityException } from "../../../../shared/entities/EntityException";
 import { ResponseQTemporal } from "../../../../shared/utilities/ResponseQ";
 
-export class RemoverWaitTimeTemporal {
-  constructor(private readonly repositoy: WaitTimeTemporalRepository) {}
+export class RemoverTemporalListaDeEsperaService {
+  constructor(private readonly repositoy: TemporalRepository) {}
 
   public remover = async (): Promise<void> => {
     try {

@@ -1,9 +1,9 @@
-import { TemporalData, TurnNumberTemporalRepository } from "../../../../repositories/temporal.repository";
+import { TemporalData, TemporalRepository } from "../../../../repositories/temporal.repository";
 import { EntityException } from "../../../../shared/entities/EntityException";
 import { ResponseQTemporal } from "../../../../shared/utilities/ResponseQ";
 
-export class RegistrarTurnNumberTemporal {
-  constructor(private readonly repositoy: TurnNumberTemporalRepository) {}
+export class RegistrarTemporalListaDeEsperaService {
+  constructor(private readonly repositoy: TemporalRepository) {}
 
   public registrar = async (data: TemporalData[]): Promise<void> => {
     try {

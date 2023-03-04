@@ -2,23 +2,19 @@ import { RemoverTurnoService } from "../../../entities/turno/service/removerTurn
 import { Turno } from "../../../entities/turno/turno.entity";
 import {
   TemporalData,
-  TurnNumberTemporalRepository,
-  WaitTimeTemporalRepository
+  TemporalRepository
 } from "../../../repositories/temporal.repository";
 import { TurnoRepository } from "../../../repositories/turno.repository";
 import { EntityException } from "../../../shared/entities/EntityException";
 import { Guid } from "../../../shared/services/Guid";
 import { ResponseQListaDeEspera, ResponseQTurno } from "../../../shared/utilities/ResponseQ";
-import { RegistrarTurnNumberTemporal } from "./temporal/registrarTurnNumber";
-import { RegistrarWaitTimeTemporal } from "./temporal/registrarWaitTime";
-import { RemoverTurnNumberTemporal } from "./temporal/removerTurnNumberTemp";
-import { RemoverWaitTimeTemporal } from "./temporal/removerWaitTime";
+import { RegistrarTemporalListaDeEsperaService } from "./temporal/registrar";
+import { RemoverTemporalListaDeEsperaService } from "./temporal/remover";
 
 export class RemoverTurnoListaDeEspera {
   constructor(
     private readonly repositoryTurno: TurnoRepository,
-    private readonly repositoryTempTurnNumber: TurnNumberTemporalRepository,
-    private readonly repositoryTempWaitTime: WaitTimeTemporalRepository
+    private readonly repositoryTemporal: TemporalRepository,
   ) {}
 
   /**
@@ -33,17 +29,11 @@ export class RemoverTurnoListaDeEspera {
       const serviceRemoverTurno = new RemoverTurnoService(this.repositoryTurno);
   
       //servicios para registrar tempalmente los números de turno y tiempo de espera
-      const serviceRegistrarTempTurnNumber = new RegistrarTurnNumberTemporal(
-        this.repositoryTempTurnNumber
+      const serviceRegistrarTemporal = new RegistrarTemporalListaDeEsperaService(
+        this.repositoryTemporal
       );
-      const serviceRegistrarTempWaitTime = new RegistrarWaitTimeTemporal(
-        this.repositoryTempWaitTime
-      );
-      const serviceRemoverTempTurnNumber = new RemoverTurnNumberTemporal(
-        this.repositoryTempTurnNumber
-      );
-      const serviceRemoverTempWaitTime = new RemoverWaitTimeTemporal(
-        this.repositoryTempTurnNumber
+      const serviceRemoverTemporal = new RemoverTemporalListaDeEsperaService(
+        this.repositoryTemporal
       );
   
       //obtenemos los datos del turno próximo a remover y disparamos posibles excepciones
@@ -58,36 +48,45 @@ export class RemoverTurnoListaDeEspera {
       if (turnosdb === null)
         throw new EntityException<ResponseQTurno>(ResponseQTurno.NOT_FOUND);
   
-      //establecemos los turnNumber temporales para ser registrados
-      let turnNumber0: TemporalData[] = [];
-      for (let i = 0; i < turnosdb.length - 1; i++)
-        turnNumber0.push({ "turnNumber" : i + 1 });
-  
-      //establecemos los waitTime temporales para ser registrados
-      let waitTime0: TemporalData[] = [];
+      //establecemos los datos temporales para ser registrados
+      let temporalData: TemporalData[] = [];
       const isAfter = (turn: number): boolean =>
         turn > turnoARemover[0].turnNumber;
       const isBefore = (turn: number): boolean =>
         turn < turnoARemover[0].turnNumber;
   
-      for (let turno of turnosdb) {
-        if (turno.id === turnoARemover[0].id) continue;
-        if (isBefore(turno.turnNumber)) {
-          waitTime0.push({ "waitTime": turno.waitTime });
+      for (let i = 0; i < turnosdb.length; i++) {
+        if (turnosdb[i].id === turnoARemover[0].id) {
+          temporalData.push({ 
+            id: turnosdb[i].id,
+            turnNumber: i + 1,
+            waitTime: turnosdb[i].waitTime
+          });
+        };
+        if (isBefore(turnosdb[i].turnNumber)) {
+          temporalData.push({ 
+            id: turnosdb[i].id,
+            turnNumber: turnosdb[i].turnNumber,
+            waitTime: turnosdb[i].waitTime
+          });
         }
-        if (isAfter(turno.turnNumber)) {
-          waitTime0.push({
-            "waitTime": turno.waitTime - turnoARemover[0].duration,
+        if (isAfter(turnosdb[i].turnNumber)) {
+          temporalData.push({
+            id: turnosdb[i].id, 
+            turnNumber: i + 1,
+            waitTime: turnosdb[i].waitTime
+          });
+          temporalData.push({
+            id: turnosdb[i].id,
+            turnNumber: 0,
+            waitTime: turnosdb[i].waitTime - turnoARemover[0].duration
           });
         }
       } //for end
   
       //registramos los datos temporales
-      const registrarTurnNumber = await serviceRegistrarTempTurnNumber.registrar(
-        turnNumber0
-      );
-      const registrarwaithTime = await serviceRegistrarTempWaitTime.registrar(
-        waitTime0
+      const resRegistrarTemporal = await serviceRegistrarTemporal.registrar(
+        temporalData
       );
   
       //removemos el turno por lote
@@ -96,10 +95,8 @@ export class RemoverTurnoListaDeEspera {
       );
   
       //vaciamos las tablas temporales
-      const responseRemoveTempTurnNumber =
-        await serviceRemoverTempTurnNumber.remover();
-      const responseRemoverTempWaitTime =
-        await serviceRemoverTempWaitTime.remover();
+      const responseRemoveTemporal =
+        await serviceRemoverTemporal.remover();
   
       //4 querys en total
       return turnoARemover[0];
