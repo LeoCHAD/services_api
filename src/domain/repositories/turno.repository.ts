@@ -5,4 +5,6 @@ import { Guid } from "../shared/services/Guid";
 
 export interface TurnoRepository extends Repository<Turno>{
   edit(id: Guid, newData: TurnoDTO): Promise<Turno>;
+  editForLote(id: Guid): Promise<number>
+  removeForLote(id: Guid): Promise<number>
 }

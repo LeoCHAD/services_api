@@ -1,7 +1,7 @@
 import { Guid } from "../services/Guid"; 
 
 export interface Repository<T> {
-  collection: T[];
+  collectionName: string;
   id: Guid;
 
   /**

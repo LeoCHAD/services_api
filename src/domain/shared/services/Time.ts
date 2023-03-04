@@ -59,4 +59,15 @@ export class Time{
       const responseCompare = actualTime.miliseconds - initialTime;
       return responseCompare <= duration;
     }
+
+    /**
+     * Obtiene el tiempo transurrido desde un tiempo inicial
+     * @param initialTime 
+     * @param duration 
+     * @returns 
+     */
+    public static getTimeElapsed(initialTime: number, duration: number) {
+        const elapsed = duration + Time.getLocalTime().miliseconds - initialTime;
+        return elapsed;
+    }
 }

@@ -1,4 +1,4 @@
-import { Descuento } from '../../../entities/descuento/descuento.entity';
+import { Descuento } from '../descuento.entity';
 import { DescuentoRepository } from '../../../repositories/descuento.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
 import { Guid } from '../../../shared/services/Guid';

@@ -13,7 +13,7 @@ export class RegistrarDescuentoService extends EntityService<Descuento> {
     super(new Descuento(new Guid(), dataDescuento.cuentaId, dataDescuento.percent!));
   }
   /**
-   * Registro de entidad cuenta a partir de la instancia actual
+   * Registro de entidad descuenta a partir de la instancia actual
    * @returns
    */
   public registrar = async (): Promise<Descuento> => {

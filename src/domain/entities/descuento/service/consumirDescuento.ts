@@ -4,13 +4,14 @@ import { Guid } from '../../../shared/services/Guid';
 import { verifyToken } from '../../../shared/services/handleToken';
 import { Time } from '../../../shared/services/Time';
 import { ResponseQDescuento } from '../../../shared/utilities/ResponseQ';
-import { RemoverDescuentoService } from './removerCliente';
+import { RemoverDescuentoService } from './removerDescuento';
 
 export class ConsumirDescuentoService{ 
   constructor(private readonly repository: DescuentoRepository){}
   /**
-   * 
-   * @returns
+   * encargada de verificar el token de descuento y removerlo de repositorio 
+   * en caso de ser válido
+   * @returns true es un token váslido y false inválido
    */
   public consumir = async (descuentoId: Guid): Promise<boolean> => {
     try {

@@ -1,6 +1,4 @@
-import { EntityBase } from "../../shared/entities/EntityBase";
-import { Guid } from "../../shared/services/Guid";
-import { Turno } from "../../entities/Turno/turno.entity";
+import { Turno } from "../../entities/turno/turno.entity";
 
 export class ListaDeEspera {
   private listOfturns: Turno[];

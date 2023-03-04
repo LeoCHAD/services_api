@@ -43,6 +43,13 @@ export enum ResponseQNotificacion {
 export enum ResponseQDescuento {
   NOT_FOUND = 'Descuento no encontrado: el descuento espera no está registrado en el repositorio',
   OUT_OF_TIME ='Descuento fuera de tiempo: el descuento no está dentro de los tiempos de atención del negocio',
+  IS_EMPTY = 'Descuentos vacíos: el reposiotrio de descuento consultado se encuentra vacío',
   ALREADY_EXIST = 'Descuento existente: el descuento ya está registrada en el repositorio',
   ERROR = 'Error en proceso de descuento: peticiones o comprobaciones fallidas',
+}
+export enum ResponseQTemporal {
+  NOT_FOUND = 'Temporal no encontrado: el temporal espera no está registrado en el repositorio',
+  OUT_OF_TIME ='Temporal fuera de tiempo: el temporal no está dentro de los tiempos de atención del negocio',
+  ALREADY_EXIST = 'Temporal existente: el temporal ya está registrada en el repositorio',
+  ERROR = 'Error en proceso de temporal: peticiones o comprobaciones fallidas',
 }

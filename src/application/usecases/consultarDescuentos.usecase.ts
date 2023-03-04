@@ -6,9 +6,9 @@ import { Guid } from "../../domain/shared/services/Guid";
 export class ConsultarDescuentoUseCase {
   constructor(private readonly repository: DescuentoRepository){}
 
-  public consultar = async (descuentoId: Guid): Promise<Descuento> => {
+  public consultar = async (): Promise<Descuento[]> => {
     const serviceConsultar = new ConsultarDescuentoService(this.repository);
-    const responseConsultar = await serviceConsultar.consultar(descuentoId)
+    const responseConsultar = await serviceConsultar.consultar()
     return responseConsultar;
   }
 }

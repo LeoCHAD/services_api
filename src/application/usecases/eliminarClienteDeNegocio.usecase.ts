@@ -1,8 +1,12 @@
-import { EditarListaDeEsperaService } from "../../domain/agregates/listaDeEspera/service/cambiarLugarTurno";
+import { RemoverTurnoListaDeEspera } from "../../domain/agregates/listaDeEspera/service/removerTurno";
 import { RemoverClienteDeNegocioService } from "../../domain/entities/clienteDeNegocio/service/removerCienteDenegocio";
 import { RemoverCuentaService } from "../../domain/entities/cuenta/service/removerCuenta";
 import { ClienteDeNegocioRepository } from "../../domain/repositories/clienteDeNegocio.repository";
 import { CuentaRepository } from "../../domain/repositories/cuenta.repository";
+import {
+  TurnNumberTemporalRepository,
+  WaitTimeTemporalRepository,
+} from "../../domain/repositories/temporal.repository";
 import { TurnoRepository } from "../../domain/repositories/turno.repository";
 import { Guid } from "../../domain/shared/services/Guid";
 
@@ -10,7 +14,9 @@ export class EliminarClienteDeNegocioUseCase {
   constructor(
     private readonly cuentaRepository: CuentaRepository,
     private readonly clienteDNRepository: ClienteDeNegocioRepository,
-    private readonly turnoRepository: TurnoRepository
+    private readonly turnoRepository: TurnoRepository,
+    private readonly turnNumberRepository: TurnNumberTemporalRepository,
+    private readonly turnWaiTimeRepository: WaitTimeTemporalRepository
   ) {}
 
   public eliminar = async (clienteId: Guid) => {
@@ -21,7 +27,11 @@ export class EliminarClienteDeNegocioUseCase {
     const serviceRemoverCuenta = new RemoverCuentaService(
       this.cuentaRepository
     );
-    const serviceEditarListaDeEspera = new EditarListaDeEsperaService(this.turnoRepository);
+    const serviceEditarListaDeEspera = new RemoverTurnoListaDeEspera(
+      this.turnoRepository,
+      this.turnNumberRepository,
+      this.turnWaiTimeRepository
+    );
 
     //consultamos los turnos asociados al cliente
     const turnosDeCuenta = await this.turnoRepository.consultByDetail({
@@ -30,8 +40,9 @@ export class EliminarClienteDeNegocioUseCase {
     //en caso de encontrar turnos los removemos en una sucesión de peticiones
     if (turnosDeCuenta !== null) {
       const res = turnosDeCuenta.map(async (turno) =>
-      serviceEditarListaDeEspera.removerTurno(turno.id)
+        serviceEditarListaDeEspera.removerTurno(turno.id)
       );
+      //se espera que solo sea un turno a eliminar
       const turnosRemovidos = await Promise.all(res);
     }
     //procedemos a remover el cleinteDN
