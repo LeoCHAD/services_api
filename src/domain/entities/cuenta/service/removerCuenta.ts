@@ -1,31 +1,23 @@
-import { CuentaRepository } from '../../../repositories/cuenta.repository';
-import { ResponseQCuenta } from '../../../shared/services/ResponseQ';
-import { EntityService } from '../../../shared/entities/EntityService';
-import { Time } from '../../../shared/services/Time';
-import { Cuenta } from '../cuenta.entity';
-import { EntityException } from '../../../shared/entities/EntityException';
-import { Observer } from '../../../shared/events/observer';
-import { EventBase } from '../../../shared/events/eventBase';
+import { CuentaRepository } from "../../../repositories/cuenta.repository";
+import { EntityException } from "../../../shared/entities/EntityException";
+import { Guid } from "../../../shared/services/Guid";
+import { Time } from "../../../shared/services/Time";
+import { ResponseQCuenta } from "../../../shared/utilities/ResponseQ";
+import { Cuenta } from "../cuenta.entity";
 
-export class RemoverCuentaService extends EntityService<Cuenta> implements Observer{
-  
-  constructor(cuenta: Cuenta, private repository: CuentaRepository){
-    super(cuenta);//los datos completos de cuenta no es requerida en el presente servicio
-  }
-  public notify =  (event: EventBase): void => {
-    console.log(event);
-  };
-
+export class RemoverCuentaService {
+  constructor(private readonly cuentaRepository: CuentaRepository) {}
   /**
    * Remueve  del repositorio la instancia actual de la entidad
-   * @returns 
+   * @returns
    */
-  public removerCuenta = async (): Promise<Cuenta> => {
+  public remover = async (cuentaId: Guid): Promise<Cuenta> => {
     try {
-      if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
-      
-      const responseEdit = await this.repository.remove(this.entity.id);
-      return responseEdit;
+      if (!Time.isOnTimeVerify())
+        throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
+
+      const responseRemove = await this.cuentaRepository.remove(cuentaId);
+      return responseRemove;
     } catch (error) {
       console.error(error);
       throw new EntityException<ResponseQCuenta>(ResponseQCuenta.ERROR);

@@ -1,23 +1,21 @@
 import { ClienteRepository } from '../../../repositories/cliente.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
-import { EntityService } from '../../../shared/entities/EntityService';
-import { ResponseQCliente } from '../../../shared/services/ResponseQ';
+import { Guid } from '../../../shared/services/Guid';
 import { Time } from '../../../shared/services/Time';
+import { ResponseQCliente } from '../../../shared/utilities/ResponseQ';
 import { Cliente } from '../cliente.entity';
 
-export class RemoverClienteService extends EntityService<Cliente> {
-  constructor(cliente: Cliente, private repository: ClienteRepository){
-    super(cliente);
-  }
+export class RemoverClienteService {
+  constructor(private readonly repository: ClienteRepository){}
 
   /**
    * Remueve  del repositorio el cliente de la instancia actual
    * @returns 
    */
-  public removerCliente = async (): Promise<Cliente> => {
+  public remover = async (clienteId: Guid): Promise<Cliente> => {
     try {
       if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCliente>(ResponseQCliente.OUT_OF_TIME);
-      const responseRemove = await this.repository.remove(this.entity.id);
+      const responseRemove = await this.repository.remove(clienteId);
       return responseRemove;
     } catch (error) {
       console.error(error);

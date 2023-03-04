@@ -1,24 +1,17 @@
-import { RegistrarTurnoService } from "../../domain/entities/Turno/service/registrarTurno";
-import { RemoverTurnoService } from "../../domain/entities/Turno/service/removerTurno";
-import { Turno } from "../../domain/entities/Turno/turno.entity";
+import { AgregarAListaDeEsperaService } from "../../domain/agregates/listaDeEspera/service/agregarAListadeEspera";
+import { TurnoDTO } from "../../domain/entities/turno/turno.dto";
+import { Turno } from "../../domain/entities/turno/turno.entity";
 import { TurnoRepository } from "../../domain/repositories/turno.repository";
 
-export class SolicitarTurno {
-  constructor(private readonly repository: TurnoRepository){}
+export class SolicitarTurnoUseCase {
+  constructor(private readonly repositoryTurno: TurnoRepository) {}
 
-  public solicitar = async (turno: Turno): Promise<Turno>=> {
-    //guardamos la instancia de turno en el repositorio con el 
-    //servicio registrarTurno
-    const registrarTurnoService = new RegistrarTurnoService(turno, this.repository);
-    const newTurno = await registrarTurnoService.crearTurno();
+  public solicitar = async (data: TurnoDTO): Promise<Turno> => {
+    const registrarTurnoService = new AgregarAListaDeEsperaService(
+      this.repositoryTurno
+    );
+    const resgisterTurno = await registrarTurnoService.agregar(data);
 
-    //debido a que la entidad turno tiene un evento asociado llamado turnocompleto
-    //propio de su ciclo de vida, lo observamos con el sericio removerturno, para 
-    //retirarlo del repositorio
-    const removerObserver = new RemoverTurnoService(turno, this.repository);
-    turno.subscribeOnComplete(removerObserver);
-    
-    //retorno de control
-    return newTurno;
-  }
+    return resgisterTurno;
+  };
 }

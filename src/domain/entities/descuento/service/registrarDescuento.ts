@@ -1,25 +1,27 @@
 import { DescuentoRepository } from '../../../repositories/descuento.repository';
 import { EntityException } from '../../../shared/entities/EntityException';
 import { EntityService } from '../../../shared/entities/EntityService';
-import { ResponseQDescuento } from '../../../shared/services/ResponseQ';
+import { ResponseQCuenta, ResponseQDescuento } from '../../../shared/utilities/ResponseQ';
 import { Time } from '../../../shared/services/Time';
 import { Descuento } from '../descuento.entity';
+import { Guid } from '../../../shared/services/Guid';
+import { DescuentoDTO } from '../descuento.dto';
 
 
-export class CrearDescuentoService extends EntityService<Descuento> { 
-  constructor(descuento: Descuento, private repository: DescuentoRepository){
-    super(descuento);
+export class RegistrarDescuentoService extends EntityService<Descuento> {
+  constructor(dataDescuento: DescuentoDTO, private repository: DescuentoRepository){
+    super(new Descuento(new Guid(), dataDescuento.cuentaId, dataDescuento.percent!));
   }
   /**
-   * Registro de entidad Descuento a partir de la instancia actual
+   * Registro de entidad descuenta a partir de la instancia actual
    * @returns
    */
-  public crearDescuento = async (): Promise<Descuento> => {
+  public registrar = async (): Promise<Descuento> => {
     try {
-      if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQDescuento>(ResponseQDescuento.OUT_OF_TIME);
+      if (!Time.isOnTimeVerify()) throw new EntityException<ResponseQCuenta>(ResponseQCuenta.OUT_OF_TIME);
       
       const responseDescuento = await this.repository.consultByDetail({
-        user: this.entity.id,
+        id: this.entity.id.id,
       });
       if (responseDescuento !== null) throw new EntityException<ResponseQDescuento>(ResponseQDescuento.ALREADY_EXIST);
       const responseSave = await this.repository.save(this.entity);
